@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GanCubeConnection, GanCubeEvent } from 'gan-web-bluetooth';
-import { twistyPlayer } from './globals';
+import { handleMoveEvent, resetCubeState } from './globals';
 
 import Cube from './components/Cube';
 import ConnectButton from './components/ConnectButton';
@@ -38,7 +38,7 @@ function App() {
 
   function handleCubeEvent(event: GanCubeEvent) {
     if (event.type == 'MOVE') {
-      twistyPlayer.experimentalAddMove(event.move, { cancel: false });
+      handleMoveEvent(event);
     } 
     // else if (event.type == 'FACELETS') {
     //   handleFaceletsEvent(event);
@@ -57,14 +57,17 @@ function App() {
       });
     } 
     else if (event.type == 'DISCONNECT') {
-      twistyPlayer.alg = '';
+      resetCubeState();
       setCubeProperties({});
     }
   }
 
   return (
     <>
-      <Cube />
+      <div className="flex justify-center">
+        <Cube customTwistyConfig={{ cameraLongitude: -30 }} />
+        <Cube />
+      </div>
 
       <div className="grid grid-flow-row-dense grid-cols-3 gap-4 w-[30rem] mx-auto mt-10">
         <DeviceProperty label="Device Name" value={cubeProperties?.deviceName || ''} />

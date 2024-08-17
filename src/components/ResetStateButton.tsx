@@ -1,10 +1,10 @@
 import { GanCubeConnection } from 'gan-web-bluetooth';
-import { twistyPlayer } from '../globals';
+import { resetCubeState } from '../globals';
 
 function ResetState({ connection }: { connection: GanCubeConnection | null}) {
   async function resetState() {
     await connection?.sendCubeCommand({ type: 'REQUEST_RESET' });
-    twistyPlayer.alg = '';
+    resetCubeState();
   }
 
   return (
