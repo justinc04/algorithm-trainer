@@ -11,7 +11,7 @@ const defaultTwistyConfig: TwistyPlayerConfig = {
   hintFacelets: 'none',
   experimentalDragInput: 'auto',
   cameraLatitude: 60,
-  cameraLongitude: 30,
+  cameraLongitude: 20,
   cameraLatitudeLimit: 30,
   tempoScale: 5
 };

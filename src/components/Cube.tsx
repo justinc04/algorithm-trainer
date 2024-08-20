@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { TwistyPlayer, TwistyPlayerConfig } from 'cubing/twisty';
-import { defaultTwistyConfig, addTwistyPlayer } from '../globals';
+import { defaultTwistyConfig, addTwistyPlayer } from '../twisty-player';
 
 function Cube({ customTwistyConfig } : { customTwistyConfig?: TwistyPlayerConfig }) {
   const cubeRef = useRef<HTMLDivElement>(null);

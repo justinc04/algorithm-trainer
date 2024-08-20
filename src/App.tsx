@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GanCubeConnection, GanCubeEvent } from 'gan-web-bluetooth';
-import { handleMoveEvent, resetCubeState } from './globals';
+import { handleMoveEvent, resetCubeState } from './twisty-player';
 
 import Cube from './components/Cube';
 import ConnectButton from './components/ConnectButton';
@@ -65,7 +65,7 @@ function App() {
   return (
     <>
       <div className="flex justify-center">
-        <Cube customTwistyConfig={{ cameraLongitude: -30 }} />
+        <Cube customTwistyConfig={{ cameraLongitude: -20 }} />
         <Cube />
       </div>
 

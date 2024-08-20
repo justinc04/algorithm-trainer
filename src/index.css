@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+twisty-player {
+    @apply size-80 -mx-5
+}
