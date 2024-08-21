@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GanCubeConnection, GanCubeEvent } from 'gan-web-bluetooth';
-import { handleMoveEvent, resetCubeState } from './twisty-player';
+import { handleFaceletsEvent, handleMoveEvent, setCubeState, uninitializeState } from './twisty-player';
 
 import Cube from './components/Cube';
 import ConnectButton from './components/ConnectButton';
@@ -40,9 +40,9 @@ function App() {
     if (event.type == 'MOVE') {
       handleMoveEvent(event);
     } 
-    // else if (event.type == 'FACELETS') {
-    //   handleFaceletsEvent(event);
-    // } 
+    else if (event.type == 'FACELETS') {
+      handleFaceletsEvent(event);
+    } 
     else if (event.type == 'HARDWARE') {
       updateCubeProperties({
         hardwareName: event.hardwareName,
@@ -57,8 +57,9 @@ function App() {
       });
     } 
     else if (event.type == 'DISCONNECT') {
-      resetCubeState();
+      setCubeState('');
       setCubeProperties({});
+      uninitializeState();
     }
   }
 

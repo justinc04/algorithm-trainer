@@ -24,7 +24,7 @@ function ConnectButton({ connection, updateConnection, handleCubeEvent }: Connec
 
   async function connectSmartCube() {
     if (connection) {
-      connection.disconnect();
+      await connection.disconnect();
       updateConnection(null);
       setButtonText('Connect');
     } 
