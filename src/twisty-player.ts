@@ -1,7 +1,9 @@
 import { TwistyPlayer, TwistyPlayerConfig } from 'cubing/twisty';
 import { experimentalSolve3x3x3IgnoringCenters } from 'cubing/search';
+import { Alg } from 'cubing/alg';
 import { GanCubeMove, GanCubeEvent } from 'gan-web-bluetooth';
 import { faceletsToPattern, patternToFacelets } from './utils/utils';
+import algs from './data/algs.json'
 
 const SOLVED_STATE = 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB';
 
@@ -21,13 +23,15 @@ const defaultTwistyConfig: TwistyPlayerConfig = {
 };
 
 let twistyPlayers: TwistyPlayer[] = [];
+let cubeTurned = false;
 
 function addTwistyPlayer(twistyPlayer: TwistyPlayer) {
   twistyPlayer.experimentalModel.currentPattern.addFreshListener(async (kpattern) => {
     const facelets = patternToFacelets(kpattern);
 
-    if (facelets == SOLVED_STATE) {
-      twistyPlayer.alg = '';
+    if (facelets == SOLVED_STATE && cubeTurned) {
+      setTimeout(applyNextAlgorithm, 500);
+      cubeTurned = false;
     }
   });
   
@@ -35,6 +39,8 @@ function addTwistyPlayer(twistyPlayer: TwistyPlayer) {
 }
 
 function handleMoveEvent(event: GanCubeMove) {
+  cubeTurned = true;
+
   twistyPlayers.forEach(twistyPlayer => {
     twistyPlayer.experimentalAddMove(event.move, { cancel: false });
   });
@@ -64,6 +70,16 @@ function uninitializeState() {
 
 function setCubeState(alg: string) {
   twistyPlayers.forEach(twistyPlayer => twistyPlayer.alg = alg);
+}
+
+let algIndex = 0;
+
+function applyNextAlgorithm() {
+  const preAuf = 'U '.repeat(Math.random() * 4);
+  const postAuf = ' U'.repeat(Math.random() * 4);
+  const scramble = preAuf + new Alg(algs[algIndex].alg).invert().toString() + postAuf;
+  setCubeState(scramble);
+  algIndex = (algIndex + 1) % algs.length;
 }
 
 export {
