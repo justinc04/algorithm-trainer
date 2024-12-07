@@ -2,5 +2,17 @@
     {
         "alg": "M2 U M U2 M' U M2",
         "auf": "U"
+    },
+    {
+        "alg": "R2' U R U R' U' R3 U' R' U R'",
+        "auf": "U'"
+    },
+    {
+        "alg": "M2 U M2 U2 M2 U M2",
+        "auf": "U2"
+    },
+    {
+        "alg": "M' U M2 U M2 U M' U2 M2",
+        "auf": "U2"
     }
 ]

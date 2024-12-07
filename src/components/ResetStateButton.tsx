@@ -3,7 +3,7 @@ import { setCubeState } from '../twisty-player';
 
 function ResetState({ connection }: { connection: GanCubeConnection | null}) {
   async function resetState() {
-    await connection?.sendCubeCommand({ type: 'REQUEST_RESET' });
+    await connection?.sendCubeCommand({ type: 'REQUEST_RESET' }); // Sets internal hardware state as solved
     setCubeState('');
   }
 

@@ -23,15 +23,15 @@ const defaultTwistyConfig: TwistyPlayerConfig = {
 };
 
 let twistyPlayers: TwistyPlayer[] = [];
-let cubeTurned = false;
+let isCubeTurned = false;
 
 function addTwistyPlayer(twistyPlayer: TwistyPlayer) {
   twistyPlayer.experimentalModel.currentPattern.addFreshListener(async (kpattern) => {
     const facelets = patternToFacelets(kpattern);
 
-    if (facelets == SOLVED_STATE && cubeTurned) {
+    if (facelets == SOLVED_STATE && isCubeTurned) {
       setTimeout(applyNextAlgorithm, 500);
-      cubeTurned = false;
+      isCubeTurned = false;
     }
   });
   
@@ -39,17 +39,18 @@ function addTwistyPlayer(twistyPlayer: TwistyPlayer) {
 }
 
 function handleMoveEvent(event: GanCubeMove) {
-  cubeTurned = true;
+  isCubeTurned = true;
 
   twistyPlayers.forEach(twistyPlayer => {
     twistyPlayer.experimentalAddMove(event.move, { cancel: false });
   });
 }
 
-let cubeStateInitialized = false;
+let isCubeStateInitialized = false;
 
 async function handleFaceletsEvent(event: GanCubeEvent) {
-  if (event.type == 'FACELETS' && !cubeStateInitialized) {
+  // Only initialize state to hardware state once after connecting
+  if (event.type == 'FACELETS' && !isCubeStateInitialized) {
     if (event.facelets != SOLVED_STATE) {
       const kpattern = faceletsToPattern(event.facelets);
       const solution = await experimentalSolve3x3x3IgnoringCenters(kpattern);
@@ -60,12 +61,12 @@ async function handleFaceletsEvent(event: GanCubeEvent) {
       setCubeState('');
     }
 
-    cubeStateInitialized = true;
+    isCubeStateInitialized = true;
   }
 }
 
 function uninitializeState() {
-  cubeStateInitialized = false;
+  isCubeStateInitialized = false;
 }
 
 function setCubeState(alg: string) {
