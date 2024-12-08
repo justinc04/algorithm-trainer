@@ -1,9 +1,8 @@
 import { TwistyPlayer, TwistyPlayerConfig } from 'cubing/twisty';
 import { experimentalSolve3x3x3IgnoringCenters } from 'cubing/search';
-import { Alg } from 'cubing/alg';
 import { GanCubeMove, GanCubeEvent } from 'gan-web-bluetooth';
-import { faceletsToPattern, patternToFacelets } from './utils/utils';
-import algs from './data/algs.json'
+import { faceletsToPattern, patternToFacelets } from './utils/facelets.ts';
+import { Alg } from 'cubing/alg';
 
 const SOLVED_STATE = 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB';
 
@@ -26,15 +25,6 @@ let twistyPlayers: TwistyPlayer[] = [];
 let isCubeTurned = false;
 
 function addTwistyPlayer(twistyPlayer: TwistyPlayer) {
-  twistyPlayer.experimentalModel.currentPattern.addFreshListener(async (kpattern) => {
-    const facelets = patternToFacelets(kpattern);
-
-    if (facelets == SOLVED_STATE && isCubeTurned) {
-      setTimeout(applyNextAlgorithm, 500);
-      isCubeTurned = false;
-    }
-  });
-  
   twistyPlayers.push(twistyPlayer);
 }
 
@@ -73,14 +63,26 @@ function setCubeState(alg: string) {
   twistyPlayers.forEach(twistyPlayer => twistyPlayer.alg = alg);
 }
 
-let algIndex = 0;
+function addCubeSolvedCallback(callback: () => void, delay: number) {
+  isCubeTurned = false;
 
-function applyNextAlgorithm() {
+  twistyPlayers.forEach(twistyPlayer => {
+    twistyPlayer.experimentalModel.currentPattern.addFreshListener(async (kpattern) => {
+      const facelets = patternToFacelets(kpattern);
+  
+      if (facelets == SOLVED_STATE && isCubeTurned) {
+        setTimeout(callback, delay);
+        isCubeTurned = false;
+      }
+    });
+  });
+}
+
+function applyAlgorithm(alg: string) {
   const preAuf = 'U '.repeat(Math.random() * 4);
   const postAuf = ' U'.repeat(Math.random() * 4);
-  const scramble = preAuf + new Alg(algs[algIndex].alg).invert().toString() + postAuf;
+  const scramble = preAuf + new Alg(alg).invert().toString() + postAuf;
   setCubeState(scramble);
-  algIndex = (algIndex + 1) % algs.length;
 }
 
 export {
@@ -89,5 +91,7 @@ export {
   handleMoveEvent,
   handleFaceletsEvent,
   uninitializeState,
-  setCubeState
+  setCubeState,
+  addCubeSolvedCallback,
+  applyAlgorithm
 }

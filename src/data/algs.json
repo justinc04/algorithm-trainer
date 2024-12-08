@@ -1,18 +1,31 @@
 [
-    {
-        "alg": "M2 U M U2 M' U M2",
-        "auf": "U"
-    },
-    {
-        "alg": "R2' U R U R' U' R3 U' R' U R'",
-        "auf": "U'"
-    },
-    {
-        "alg": "M2 U M2 U2 M2 U M2",
-        "auf": "U2"
-    },
-    {
-        "alg": "M' U M2 U M2 U M' U2 M2",
-        "auf": "U2"
-    }
+    "R U R' U R U2 R' U2 R' U' R U' R' U2 R (U2)",
+    "R' U R U2 R' U' R U' R U R' U' R' U' R U R U' R' (U2)",
+    "R' U2 R U R' U R2 U2 R' U' R U' R' (U')",
+    "R' U R U2 R' U' R U2 R' U' R U' R' U R (U)",
+    "R' U' R U' R' U2 R U R' U2 R U R' U R (U2)",
+    "R U2 R' U' R U' R' U R U R' U R U2 R' (U)",
+    "R U R' U R U' R' U R' U' R2 U' R2 U2 R (U2)",
+    "R U2 R' U' R U' R2 U2 R U R' U R (U)",
+    "R' U' R2 U R2 U R2 U2 R' U R' U R (U)",
+    "R' U2 R U R' U R U' R' U' R U' R' U2 R (U2)",
+    "R U R2 U' R2 U' R2 U2 R U' R U' R' (U2)",
+    "R' U' R U' R' U R U' R U R2 U R2 U2 R' (U)",
+
+    "R' U' R U' R' U' R2 D r' U2 r D' R2 U' R (U2)",
+    "R U R' U' R U R2 D' R U' R' D R U2 R U' R' (U')",
+    "R' U D' R U2 R' D R' U' R U2 R' U' R2 (U)",
+    "R' U R2 D r' U2 r D' R2 U' R (U)",
+    "R' U' R U R2 D' R U2 R' D R2 U2 R' U2 R (U)",
+    "R U' R2 D' r U2 r' D R2 U R' (U')",
+    "R U R' U2 R' D' R U R' D R2 U' R' U R U' R' (U2)",
+    "R2 U' R D R' U' R D' R U R2 U R2 (U)",
+    "R' D' R U' R' D R U' R U' R' U R U' R' U' R U R' (U')",
+    "R U R' U R U R2 D' r U2 r' D R2 U R' (U')",
+    "R2 F R U R' U' R' F' R3 U' R2 U2 R U2 R (U)",
+    "R2 D' R U' R' D R U R U R' U2 R' D' R U2 R' D R2 (U')",
+
+    "R' F R U R' U' R' F' R2 U' R' U2 R (U)",
+    "R' U' R2 U R' F' R U R' U' R' F R2 U' R' U' R' U R",
+    "r' F R' F' r R U2 R' U' R (U')"
 ]
