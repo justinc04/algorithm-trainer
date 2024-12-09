@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GanCubeConnection, GanCubeEvent } from 'gan-web-bluetooth';
-import { addCubeSolvedCallback, applyAlgorithm, handleFaceletsEvent, handleMoveEvent, setCubeState, uninitializeState } from './twisty-player';
+import { addCubeSolvedCallback, applyAlgorithm, currentAlgorithm, handleFaceletsEvent, handleMoveEvent, setCubeState, uninitializeState } from './twisty-player';
 import { shuffle } from './utils/array.ts';
 import algs from './data/algs.json'
 
@@ -23,6 +23,7 @@ function App() {
   const [connection, setConnection] = useState<GanCubeConnection | null>(null);
   const [cubeProperties, setCubeProperties] = useState<CubeProperties>();
   const [algIndex, setAlgIndex] = useState(-1);
+  const [isTraining, setIsTraining] = useState(false);
 
   function updateConnection(newConnection: GanCubeConnection | null) {
     setConnection(newConnection);
@@ -70,6 +71,7 @@ function App() {
     addCubeSolvedCallback(applyNextAlgorithm, 400);
     shuffle(algs);
     applyNextAlgorithm();
+    setIsTraining(true);
   }
 
   function applyNextAlgorithm() {
@@ -87,6 +89,15 @@ function App() {
     });
   }
 
+  useEffect(() => {
+    document.addEventListener('keydown', e => {
+      if (e.key === ' ') {
+        e.preventDefault();
+        setCubeState(currentAlgorithm);
+      }
+    });
+  }, []);
+
   return (
     <>
       <div className="flex justify-center mt-10 text-2xl">
@@ -100,7 +111,7 @@ function App() {
 
       <div className="grid grid-cols-3 mx-auto gap-4 w-[30rem] mt-10">
         <ConnectButton connection={connection} updateConnection={updateConnection} handleCubeEvent={handleCubeEvent}/>
-        <button className="border-solid border-2 px-2 py-1" onClick={startTraining}>
+        <button className="border-solid border-2 px-2 py-1 disabled:bg-gray-200" onClick={startTraining} disabled={isTraining}>
           Start Training
         </button>
         <ResetStateButton connection={connection}/>

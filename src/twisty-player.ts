@@ -78,11 +78,14 @@ function addCubeSolvedCallback(callback: () => void, delay: number) {
   });
 }
 
+let currentAlgorithm = '';
+
 function applyAlgorithm(alg: string) {
   const preAuf = 'U '.repeat(Math.random() * 4);
   const postAuf = ' U'.repeat(Math.random() * 4);
   const scramble = preAuf + new Alg(alg).invert().toString() + postAuf;
   setCubeState(scramble);
+  currentAlgorithm = scramble;
 }
 
 export {
@@ -93,5 +96,6 @@ export {
   uninitializeState,
   setCubeState,
   addCubeSolvedCallback,
-  applyAlgorithm
+  applyAlgorithm,
+  currentAlgorithm
 }
