@@ -120,7 +120,6 @@ function App() {
         <button 
           className="border-solid border-2 px-2 py-1 disabled:bg-gray-200" 
           onClick={() => setShowDeviceProperties(prev => !prev)} 
-          disabled={isTraining}
         >
           Device Properties
         </button>
