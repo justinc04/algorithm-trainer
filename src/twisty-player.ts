@@ -15,9 +15,9 @@ const defaultTwistyConfig: TwistyPlayerConfig = {
   controlPanel: 'none',
   hintFacelets: 'none',
   experimentalDragInput: 'auto',
-  cameraLatitude: 60,
+  cameraLatitude: 35,
   cameraLongitude: 20,
-  cameraLatitudeLimit: 30,
+  cameraLatitudeLimit: 50,
   tempoScale: 5
 };
 
@@ -88,6 +88,10 @@ function applyAlgorithm(alg: string) {
   currentAlgorithm = scramble;
 }
 
+function reapplyAlgorithm() {
+  setCubeState(currentAlgorithm);
+}
+
 export {
   defaultTwistyConfig,
   addTwistyPlayer,
@@ -97,5 +101,5 @@ export {
   setCubeState,
   addCubeSolvedCallback,
   applyAlgorithm,
-  currentAlgorithm
+  reapplyAlgorithm
 }

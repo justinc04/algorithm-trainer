@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 twisty-player {
-    @apply size-80 -mx-5
+    @apply size-96 -mx-8
 }

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { GanCubeConnection, GanCubeEvent } from 'gan-web-bluetooth';
-import { addCubeSolvedCallback, applyAlgorithm, currentAlgorithm, handleFaceletsEvent, handleMoveEvent, setCubeState, uninitializeState } from './twisty-player';
 import { shuffle } from './utils/array.ts';
+import * as twistyPlayer from './twisty-player';
 import algs from './data/algs.json'
 
 import Cube from './components/Cube';
 import ConnectButton from './components/ConnectButton';
-import DeviceProperty from './components/DeviceProperty';
 import ResetStateButton from './components/ResetStateButton';
+import DeviceProperties from './components/DeviceProperties.tsx';
 
-type CubeProperties = {
+export type CubeProperties = {
   deviceName?: string;
   deviceMAC?: string;
   hardwareName?: string;
@@ -22,6 +22,7 @@ type CubeProperties = {
 function App() {
   const [connection, setConnection] = useState<GanCubeConnection | null>(null);
   const [cubeProperties, setCubeProperties] = useState<CubeProperties>();
+  const [showDeviceProperties, setShowDeviceProperties] = useState(false);
   const [algIndex, setAlgIndex] = useState(-1);
   const [isTraining, setIsTraining] = useState(false);
 
@@ -42,10 +43,10 @@ function App() {
 
   function handleCubeEvent(event: GanCubeEvent) {
     if (event.type == 'MOVE') {
-      handleMoveEvent(event);
+      twistyPlayer.handleMoveEvent(event);
     } 
     else if (event.type == 'FACELETS') {
-      handleFaceletsEvent(event);
+      twistyPlayer.handleFaceletsEvent(event);
     } 
     else if (event.type == 'HARDWARE') {
       updateCubeProperties({
@@ -61,14 +62,14 @@ function App() {
       });
     } 
     else if (event.type == 'DISCONNECT') {
-      setCubeState('');
+      twistyPlayer.setCubeState('');
       setCubeProperties({});
-      uninitializeState();
+      twistyPlayer.uninitializeState();
     }
   }
 
   function startTraining() {
-    addCubeSolvedCallback(applyNextAlgorithm, 400);
+    twistyPlayer.addCubeSolvedCallback(applyNextAlgorithm, 400);
     shuffle(algs);
     applyNextAlgorithm();
     setIsTraining(true);
@@ -83,7 +84,7 @@ function App() {
         shuffle(algs);
       }
 
-      applyAlgorithm(algs[nextIndex]);
+      twistyPlayer.applyAlgorithm(algs[nextIndex]);
   
       return nextIndex;
     });
@@ -93,14 +94,14 @@ function App() {
     document.addEventListener('keydown', e => {
       if (e.key === ' ') {
         e.preventDefault();
-        setCubeState(currentAlgorithm);
+        twistyPlayer.reapplyAlgorithm();
       }
     });
   }, []);
 
   return (
-    <>
-      <div className="flex justify-center mt-10 text-2xl">
+    <div className="h-screen flex flex-col justify-center items-center">
+      <div className="flex my-10 text-3xl font-semibold">
         {algIndex + 1}/{algs.length}
       </div>
 
@@ -109,24 +110,24 @@ function App() {
         <Cube />
       </div>
 
-      <div className="grid grid-cols-3 mx-auto gap-4 w-[30rem] mt-10">
+      <button className="border-solid border-2 px-2 py-1 w-60 mt-10 disabled:bg-gray-200" onClick={startTraining} disabled={isTraining}>
+        Train
+      </button>
+      
+      <div className="grid grid-rows-3 gap-4 w-60 mt-10">
         <ConnectButton connection={connection} updateConnection={updateConnection} handleCubeEvent={handleCubeEvent}/>
-        <button className="border-solid border-2 px-2 py-1 disabled:bg-gray-200" onClick={startTraining} disabled={isTraining}>
-          Start Training
-        </button>
         <ResetStateButton connection={connection}/>
+        <button 
+          className="border-solid border-2 px-2 py-1 disabled:bg-gray-200" 
+          onClick={() => setShowDeviceProperties(prev => !prev)} 
+          disabled={isTraining}
+        >
+          Device Properties
+        </button>
       </div>
 
-      <div className="grid grid-flow-row-dense grid-cols-3 gap-4 w-[30rem] mx-auto mt-10">
-        <DeviceProperty label="Device Name" value={cubeProperties?.deviceName || ''} />
-        <DeviceProperty label="Device MAC" value={cubeProperties?.deviceMAC || ''} />
-        <DeviceProperty label="Hardware Name" value={cubeProperties?.hardwareName || ''} />
-        <DeviceProperty label="Hardware Version" value={cubeProperties?.hardwareVersion || ''} />
-        <DeviceProperty label="Software Version" value={cubeProperties?.softwareVersion || ''} />
-        <DeviceProperty label="Gyro Supported" value={cubeProperties?.gyroSupported || ''} />
-        <DeviceProperty label="Battery" value={cubeProperties?.battery || ''} />
-      </div>
-    </>
+      {showDeviceProperties && <DeviceProperties {...cubeProperties} />}
+    </div>
   );
 }
 
