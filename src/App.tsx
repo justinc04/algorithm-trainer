@@ -25,6 +25,7 @@ function App() {
   const [showDeviceProperties, setShowDeviceProperties] = useState(false);
   const [algIndex, setAlgIndex] = useState(-1);
   const [isTraining, setIsTraining] = useState(false);
+  const [showAlgorithm, setShowAlgorithm] = useState(false);
 
   function updateConnection(newConnection: GanCubeConnection | null) {
     setConnection(newConnection);
@@ -85,24 +86,38 @@ function App() {
       }
 
       twistyPlayer.applyAlgorithm(algs[nextIndex]);
+      setShowAlgorithm(false);
   
       return nextIndex;
     });
   }
 
-  useEffect(() => {
-    document.addEventListener('keydown', e => {
-      if (e.key === ' ') {
+  function handleKeyboardInput(e: KeyboardEvent) {
+    switch (e.key) {
+      case ' ':
+        // Reapply current algorithm
         e.preventDefault();
         twistyPlayer.reapplyAlgorithm();
-      }
-    });
+        break;
+      case 'Enter':
+        // Show/hide current algorithm
+        setShowAlgorithm(prev => !prev);
+        break;
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyboardInput);
   }, []);
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      <div className="flex my-10 text-3xl font-semibold">
-        {algIndex + 1}/{algs.length}
+      <div className="flex mt-10 text-3xl font-semibold">
+        {isTraining && `${algIndex + 1}/${algs.length}`}
+      </div>
+      
+      <div className="flex my-6 text-2xl">
+        {showAlgorithm && algs[algIndex]}
       </div>
 
       <div className="flex justify-center">
