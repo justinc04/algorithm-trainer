@@ -92,12 +92,35 @@ function App() {
     });
   }
 
+  function applyPreviousAlgorithm() {
+    setAlgIndex(currentIndex => {
+      let prevIndex = currentIndex - 1;
+      
+      if (prevIndex < 0) {
+        return currentIndex;
+      }
+
+      twistyPlayer.applyAlgorithm(algs[prevIndex]);
+      setShowAlgorithm(false);
+  
+      return prevIndex;
+    });
+  }
+
   function handleKeyboardInput(e: KeyboardEvent) {
     switch (e.key) {
       case ' ':
         // Reapply current algorithm
         e.preventDefault();
         twistyPlayer.reapplyAlgorithm();
+        break;
+      case 'ArrowRight':
+        // Skip to next algorithm
+        applyNextAlgorithm();
+        break;
+      case 'ArrowLeft':
+        // Go back to previous algorithm
+        applyPreviousAlgorithm();
         break;
       case 'Enter':
         // Show/hide current algorithm
