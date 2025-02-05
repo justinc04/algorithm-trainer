@@ -3,7 +3,7 @@ import { CubeProperties } from '../App';
 
 function DeviceProperties(cubeProperties: CubeProperties) {
     return (
-      <div className="grid grid-flow-row-dense grid-cols-3 gap-4 w-[30rem] mx-auto mt-10">
+      <div className="absolute top-12 left-4 grid grid-flow-row-dense grid-cols-3 gap-4 w-[30rem]">
         <DeviceProperty label="Device Name" value={cubeProperties?.deviceName || ''} />
         <DeviceProperty label="Device MAC" value={cubeProperties?.deviceMAC || ''} />
         <DeviceProperty label="Hardware Name" value={cubeProperties?.hardwareName || ''} />

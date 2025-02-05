@@ -126,6 +126,10 @@ function App() {
         // Show/hide current algorithm
         setShowAlgorithm(prev => !prev);
         break;
+      case 'Escape':
+        //Show hide device properties
+        setShowDeviceProperties(prev => !prev);
+        break;
     }
   }
 
@@ -139,7 +143,7 @@ function App() {
         {isTraining && `${algIndex + 1}/${algs.length}`}
       </div>
       
-      <div className="flex my-6 text-2xl">
+      <div className="flex my-6 text-3xl">
         {showAlgorithm && algs[algIndex]}
       </div>
 
